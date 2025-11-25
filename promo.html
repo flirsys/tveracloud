@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TverACloud | Надежные VDS в Твери</title>
+    <style>
+        /* --- Основные стили --- */
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #3b82f6; /* Синий */
+            --accent: #10b981;  /* Зеленый */
+            --hot: #ef4444;     /* Красный для скидок */
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* --- Фон с градиентом и точками (CSS Magic) --- */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+                        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.15), transparent 25%);
+            background-size: cover;
+        }
+        
+        /* Имитация хаотичных точек через паттерн */
+        .dots-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: radial-gradient(#ffffff 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.1;
+        }
+
+        /* --- Контейнер --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Шапка --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo svg {
+            margin-right: 10px;
+            fill: var(--primary);
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 20px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        /* --- Главный экран --- */
+        .hero {
+            text-align: center;
+            padding: 80px 0 40px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        /* --- Купон --- */
+        .coupon-banner {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.2));
+            border: 2px dashed var(--hot);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+
+        .coupon-banner h2 {
+            margin: 0;
+            color: var(--hot);
+            font-size: 2rem;
+        }
+
+        .coupon-code {
+            background: #fff;
+            color: var(--bg-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            display: inline-block;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+        
+        .coupon-desc {
+            margin-top: 10px;
+            color: var(--text-main);
+        }
+
+        /* --- Тарифы --- */
+        .pricing {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: var(--primary);
+        }
+
+        .card.popular {
+            border: 1px solid var(--primary);
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, var(--card-bg) 100%);
+        }
+
+        .card.popular::before {
+            content: "ХИТ ПРОДАЖ";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+        }
+
+        .features li svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            fill: var(--accent);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: #0b1120;
+            padding: 50px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .footer-col {
+            margin-bottom: 20px;
+        }
+
+        .footer-col h4 {
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
+        .footer-col p, .footer-col a {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* --- SVG Icons --- */
+        .icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            header { flex-direction: column; gap: 15px; }
+            .pricing { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-animation"></div>
+    <div class="dots-overlay"></div>
+
+    <div class="container">
+        <header>
+            <a href="#" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                TverACloud
+            </a>
+            <nav>
+                <a href="#">Тарифы</a>
+                <a href="#">О нас</a>
+                <a href="#">Поддержка</a>
+                <a href="#">Войти</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>Мощные VDS в Твери</h1>
+            <p class="subtitle">Локальный хостинг с минимальным пингом для вашего бизнеса. <br>Идеально для 1С, удаленных офисов и игровых серверов.</p>
+        </section>
+
+        <div class="coupon-banner">
+            <h2>Скидка -60% для новых клиентов!</h2>
+            <p class="coupon-desc">Только первые 3 месяца аренды любого сервера.</p>
+            <div class="coupon-code">TVER60START</div>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 10px;">*Нажмите на код, чтобы скопировать</p>
+        </div>
+
+        <div class="pricing">
+            
+            <div class="card">
+                <div class="plan-name">START</div>
+                <div class="price">1 100 ₽<span>/мес</span></div>
+                <ul class="features">
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 2 Ядра CPU (3.0 GHz)</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 4 GB RAM</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 40 GB SSD NVMe</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Канал 100 Мбит/с</li>
+                </ul>
+                <a href="#" class="btn">Заказать</a>
+            </div>
+
+            <div class="card popular">
+                <div class="plan-name">MEDIUM</div>
+                <div class="price">2 560 ₽<span>/мес</span></div>
+                <ul class="features">
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 3 Ядра CPU (Xeon Gold)</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 8 GB RAM</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 60 GB SSD NVMe</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Защита от DDoS</li>
+                </ul>
+                <a href="#" class="btn btn-primary">Заказать</a>
+            </div>
+
+            <div class="card">
+                <div class="plan-name">HARD</div>
+                <div class="price">4 200 ₽<span>/мес</span></div>
+                <ul class="features">
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 4 Ядра CPU (High Perf)</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 12 GB RAM</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 80 GB SSD NVMe</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Выделенный IP</li>
+                </ul>
+                <a href="#" class="btn">Заказать</a>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-col" style="max-width: 300px;">
+                <div class="logo" style="margin-bottom: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                    TverACloud
+                </div>
+                <p>Ваш надежный партнер в мире облачных технологий. Размещаем оборудование в лучших ЦОД Твери и Москвы.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <p>г. Тверь, пр-т Чайковского, д. 28/2, оф. 404</p>
+                <p>Телефон: +7 (4822) 99-00-11</p>
+                <p>Email: support@tveracloud.ru</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Документы</h4>
+                <a href="#">Политика конфиденциальности</a>
+                <a href="#">Договор оферты</a>
+                <a href="#">Реквизиты</a>
+            </div>
+        </div>
+        <div class="container" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; color: #64748b;">
+            &copy; 2024 ИП "ТверьХост". Все права защищены.
+        </div>
+    </footer>
+
+</body>
+</html>
