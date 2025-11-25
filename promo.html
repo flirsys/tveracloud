@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TverACloud | Надежные VDS в Твери</title>
     <style>
-        /* --- Основные стили --- */
+        /* --- Основные стили (Те же, что и были) --- */
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
-            --primary: #3b82f6; /* Синий */
-            --accent: #10b981;  /* Зеленый */
-            --hot: #ef4444;     /* Красный для скидок */
+            --primary: #3b82f6;
+            --accent: #10b981;
+            --hot: #ef4444;
             --text-main: #f8fafc;
             --text-secondary: #94a3b8;
         }
@@ -25,7 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* --- Фон с градиентом и точками (CSS Magic) --- */
         .background-animation {
             position: fixed;
             top: 0;
@@ -38,7 +37,6 @@
             background-size: cover;
         }
         
-        /* Имитация хаотичных точек через паттерн */
         .dots-overlay {
             position: fixed;
             top: 0;
@@ -51,7 +49,6 @@
             opacity: 0.1;
         }
 
-        /* --- Контейнер --- */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -76,234 +73,144 @@
             text-decoration: none;
         }
 
-        .logo svg {
-            margin-right: 10px;
-            fill: var(--primary);
-        }
-
-        nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            margin-left: 20px;
-            transition: 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--primary);
-        }
+        .logo svg { margin-right: 10px; fill: var(--primary); }
+        nav a { color: var(--text-secondary); text-decoration: none; margin-left: 20px; transition: 0.3s; }
+        nav a:hover { color: var(--primary); }
 
         /* --- Главный экран --- */
-        .hero {
-            text-align: center;
-            padding: 80px 0 40px;
-        }
-
+        .hero { text-align: center; padding: 80px 0 40px; }
         h1 {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
+            font-size: 3.5rem; margin-bottom: 10px;
             background: linear-gradient(90deg, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 40px;
-        }
+        .subtitle { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 40px; }
 
         /* --- Купон --- */
         .coupon-banner {
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.2));
             border: 2px dashed var(--hot);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 60px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+            border-radius: 15px; padding: 30px; text-align: center;
+            max-width: 800px; margin: 0 auto 60px;
+            cursor: pointer; transition: transform 0.2s;
         }
-
-        .coupon-banner h2 {
-            margin: 0;
-            color: var(--hot);
-            font-size: 2rem;
-        }
-
+        .coupon-banner:active { transform: scale(0.98); }
+        .coupon-banner h2 { margin: 0; color: var(--hot); font-size: 2rem; }
         .coupon-code {
-            background: #fff;
-            color: var(--bg-color);
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.5rem;
-            display: inline-block;
-            margin-top: 15px;
-            cursor: pointer;
-        }
-        
-        .coupon-desc {
-            margin-top: 10px;
-            color: var(--text-main);
+            background: #fff; color: var(--bg-color); padding: 10px 20px;
+            border-radius: 8px; font-weight: bold; font-size: 1.5rem;
+            display: inline-block; margin-top: 15px;
         }
 
         /* --- Тарифы --- */
-        .pricing {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 80px;
-        }
-
+        .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px; }
         .card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
+            background: var(--card-bg); border-radius: 20px; padding: 40px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative;
         }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border-color: var(--primary);
-        }
-
-        .card.popular {
-            border: 1px solid var(--primary);
-            background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, var(--card-bg) 100%);
-        }
-
+        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-color: var(--primary); }
+        .card.popular { border: 1px solid var(--primary); background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, var(--card-bg) 100%); }
         .card.popular::before {
-            content: "ХИТ ПРОДАЖ";
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            content: "ХИТ ПРОДАЖ"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
         }
-
-        .plan-name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: var(--text-main);
-        }
-
-        .price {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--text-main);
-            margin-bottom: 20px;
-        }
-
-        .price span {
-            font-size: 1rem;
-            color: var(--text-secondary);
-        }
-
-        .features {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-
-        .features li {
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            color: var(--text-secondary);
-        }
-
-        .features li svg {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-            fill: var(--accent);
-        }
-
+        .plan-name { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; }
+        .price { font-size: 2.5rem; font-weight: bold; margin-bottom: 20px; }
+        .price span { font-size: 1rem; color: var(--text-secondary); }
+        .features { list-style: none; padding: 0; margin-bottom: 30px; text-align: left; }
+        .features li { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; color: var(--text-secondary); }
+        .features li svg { width: 20px; height: 20px; margin-right: 10px; fill: var(--accent); }
+        
         .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
+            display: block; width: 100%; padding: 15px; border-radius: 10px;
+            background: rgba(255,255,255,0.1); color: #fff; text-decoration: none;
+            font-weight: bold; transition: 0.3s; cursor: pointer; border: none; font-size: 1rem;
         }
-
-        .btn:hover {
-            background: var(--primary);
-        }
-
-        .btn-primary {
-            background: var(--primary);
-        }
-
-        .btn-primary:hover {
-            background: #2563eb;
-        }
+        .btn:hover { background: var(--primary); }
+        .btn-primary { background: var(--primary); }
+        .btn-primary:hover { background: #2563eb; }
 
         /* --- Footer --- */
-        footer {
-            background: #0b1120;
-            padding: 50px 0;
-            margin-top: 50px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+        footer { background: #0b1120; padding: 50px 0; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; }
+        .footer-col { margin-bottom: 20px; }
+        .footer-col h4 { margin-bottom: 15px; }
+        .footer-col p, .footer-col a { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; text-decoration: none; display: block; }
+
+        /* --- МОДАЛЬНЫЕ ОКНА (Новые стили) --- */
+        .modal-overlay {
+            display: none; /* Скрыто по умолчанию */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .footer-content {
+        .modal-overlay.active {
             display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+            opacity: 1;
         }
 
-        .footer-col {
-            margin-bottom: 20px;
+        .modal {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        .footer-col h4 {
-            color: var(--text-main);
-            margin-bottom: 15px;
+        .modal-overlay.active .modal {
+            transform: scale(1);
         }
 
-        .footer-col p, .footer-col a {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            text-decoration: none;
-            display: block;
+        .modal h3 { margin-top: 0; text-align: center; }
+        
+        .close-modal {
+            position: absolute; top: 15px; right: 15px;
+            background: none; border: none; color: var(--text-secondary);
+            font-size: 24px; cursor: pointer;
         }
 
-        /* --- SVG Icons --- */
-        .icon {
-            display: inline-block;
-            width: 1em;
-            height: 1em;
-            stroke-width: 0;
-            stroke: currentColor;
-            fill: currentColor;
+        /* Элементы внутри модалки оплаты */
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-secondary); }
+        .form-input {
+            width: 100%; padding: 12px; border-radius: 8px;
+            background: #0f172a; border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; font-size: 1rem; box-sizing: border-box;
         }
+        .form-input:focus { outline: none; border-color: var(--primary); }
+        
+        .row { display: flex; gap: 10px; }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            header { flex-direction: column; gap: 15px; }
-            .pricing { grid-template-columns: 1fr; }
+        /* Успешное сообщение купона */
+        .success-icon {
+            width: 80px; height: 80px; background: var(--accent);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
         }
+        .success-icon svg { width: 40px; height: 40px; fill: white; }
+
+        /* Лоадер для оплаты */
+        .loader {
+            border: 4px solid #f3f3f3; border-top: 4px solid var(--primary);
+            border-radius: 50%; width: 40px; height: 40px;
+            animation: spin 1s linear infinite; margin: 20px auto;
+            display: none;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .payment-success { display: none; text-align: center; }
+
     </style>
 </head>
 <body>
@@ -321,58 +228,109 @@
                 <a href="#">Тарифы</a>
                 <a href="#">О нас</a>
                 <a href="#">Поддержка</a>
-                <a href="#">Войти</a>
             </nav>
         </header>
 
         <section class="hero">
             <h1>Мощные VDS в Твери</h1>
-            <p class="subtitle">Локальный хостинг с минимальным пингом для вашего бизнеса. <br>Идеально для 1С, удаленных офисов и игровых серверов.</p>
+            <p class="subtitle">Локальный хостинг с минимальным пингом для вашего бизнеса.</p>
         </section>
 
-        <div class="coupon-banner">
+        <div class="coupon-banner" onclick="openCouponModal()">
             <h2>Скидка -60% для новых клиентов!</h2>
             <p class="coupon-desc">Только первые 3 месяца аренды любого сервера.</p>
             <div class="coupon-code">TVER60START</div>
-            <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 10px;">*Нажмите на код, чтобы скопировать</p>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 10px;">*Нажмите, чтобы применить</p>
         </div>
 
         <div class="pricing">
-            
             <div class="card">
                 <div class="plan-name">START</div>
                 <div class="price">1 100 ₽<span>/мес</span></div>
                 <ul class="features">
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 2 Ядра CPU (3.0 GHz)</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 4 GB RAM</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 40 GB SSD NVMe</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Канал 100 Мбит/с</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 2 Ядра CPU</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 40 GB SSD</li>
                 </ul>
-                <a href="#" class="btn">Заказать</a>
+                <button class="btn" onclick="openOrderModal('START')">Заказать</button>
             </div>
 
             <div class="card popular">
                 <div class="plan-name">MEDIUM</div>
                 <div class="price">2 560 ₽<span>/мес</span></div>
                 <ul class="features">
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 3 Ядра CPU (Xeon Gold)</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 8 GB RAM</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 60 GB SSD NVMe</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Защита от DDoS</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 3 Ядра CPU</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 60 GB SSD</li>
                 </ul>
-                <a href="#" class="btn btn-primary">Заказать</a>
+                <button class="btn btn-primary" onclick="openOrderModal('MEDIUM')">Заказать</button>
             </div>
 
             <div class="card">
                 <div class="plan-name">HARD</div>
                 <div class="price">4 200 ₽<span>/мес</span></div>
                 <ul class="features">
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 4 Ядра CPU (High Perf)</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 12 GB RAM</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 80 GB SSD NVMe</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Выделенный IP</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 4 Ядра CPU</li>
+                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 80 GB SSD</li>
                 </ul>
-                <a href="#" class="btn">Заказать</a>
+                <button class="btn" onclick="openOrderModal('HARD')">Заказать</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalCoupon" class="modal-overlay" onclick="closeModals(event)">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModals(null)">&times;</button>
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <h3>Купон применен!</h3>
+            <p style="text-align: center; color: #94a3b8;">
+                Промокод <b>TVER60START</b> успешно активирован.<br>
+                Скидка 60% будет учтена при первом платеже.
+            </p>
+            <button class="btn btn-primary" onclick="closeModals(null)">Отлично</button>
+        </div>
+    </div>
+
+    <div id="modalOrder" class="modal-overlay" onclick="closeModals(event)">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModals(null)">&times;</button>
+            
+            <div id="paymentForm">
+                <h3 id="orderTitle">Оформление: Тариф START</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="vash@mail.ru">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Номер карты</label>
+                    <input type="text" class="form-input" placeholder="0000 0000 0000 0000">
+                </div>
+
+                <div class="row">
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label">Срок</label>
+                        <input type="text" class="form-input" placeholder="MM/YY">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label">CVC</label>
+                        <input type="text" class="form-input" placeholder="123">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="processPayment()">Оплатить</button>
+            </div>
+
+            <div class="loader" id="paymentLoader"></div>
+
+            <div id="paymentSuccess" class="payment-success">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </div>
+                <h3>Оплата прошла успешно!</h3>
+                <p style="color: #94a3b8;">Сервер будет создан в течение 5 минут. Данные доступа отправлены на Email.</p>
+                <button class="btn" onclick="closeModals(null)">Закрыть</button>
             </div>
 
         </div>
@@ -381,31 +339,69 @@
     <footer>
         <div class="container footer-content">
             <div class="footer-col" style="max-width: 300px;">
-                <div class="logo" style="margin-bottom: 10px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
-                    TverACloud
-                </div>
-                <p>Ваш надежный партнер в мире облачных технологий. Размещаем оборудование в лучших ЦОД Твери и Москвы.</p>
+                <div class="logo" style="margin-bottom: 10px;">TverACloud</div>
+                <p>Ваш надежный партнер в мире облачных технологий.</p>
             </div>
-            
             <div class="footer-col">
                 <h4>Контакты</h4>
-                <p>г. Тверь, пр-т Чайковского, д. 28/2, оф. 404</p>
-                <p>Телефон: +7 (4822) 99-00-11</p>
-                <p>Email: support@tveracloud.ru</p>
-            </div>
-
-            <div class="footer-col">
-                <h4>Документы</h4>
-                <a href="#">Политика конфиденциальности</a>
-                <a href="#">Договор оферты</a>
-                <a href="#">Реквизиты</a>
+                <p>г. Тверь, пр-т Чайковского, д. 28/2</p>
+                <p>+7 (4822) 99-00-11</p>
             </div>
         </div>
         <div class="container" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; color: #64748b;">
-            &copy; 2024 ИП "ТверьХост". Все права защищены.
+            &copy; 2024 ИП "ТверьХост".
         </div>
     </footer>
 
+    <script>
+        // Открытие модалки купона
+        function openCouponModal() {
+            // Копируем текст в буфер
+            navigator.clipboard.writeText("TVER60START");
+            
+            const modal = document.getElementById('modalCoupon');
+            modal.classList.add('active');
+        }
+
+        // Открытие модалки заказа
+        function openOrderModal(planName) {
+            const modal = document.getElementById('modalOrder');
+            const title = document.getElementById('orderTitle');
+            
+            // Сбрасываем состояние формы (если открываем повторно)
+            document.getElementById('paymentForm').style.display = 'block';
+            document.getElementById('paymentLoader').style.display = 'none';
+            document.getElementById('paymentSuccess').style.display = 'none';
+
+            title.innerText = "Оформление: Тариф " + planName;
+            modal.classList.add('active');
+        }
+
+        // Имитация процесса оплаты
+        function processPayment() {
+            const form = document.getElementById('paymentForm');
+            const loader = document.getElementById('paymentLoader');
+            const success = document.getElementById('paymentSuccess');
+
+            // Скрываем форму, показываем крутилку
+            form.style.display = 'none';
+            loader.style.display = 'block';
+
+            // Ждем 2 секунды (типа запрос в банк)
+            setTimeout(() => {
+                loader.style.display = 'none';
+                success.style.display = 'block';
+            }, 2000);
+        }
+
+        // Закрытие всех модалок
+        function closeModals(event) {
+            // Если клик по крестику или кнопке (event = null) ИЛИ клик по темному фону (event.target == overlay)
+            if (!event || event.target.classList.contains('modal-overlay')) {
+                document.getElementById('modalCoupon').classList.remove('active');
+                document.getElementById('modalOrder').classList.remove('active');
+            }
+        }
+    </script>
 </body>
 </html>
