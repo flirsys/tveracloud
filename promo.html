@@ -1,422 +1,938 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TverACloud | Надежные VDS в Твери</title>
-    <style>
-        /* --- Основные стили (Те же, что и были) --- */
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --primary: #3b82f6;
-            --accent: #10b981;
-            --hot: #ef4444;
-            --text-main: #f8fafc;
-            --text-secondary: #94a3b8;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
-        }
-
-        .background-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
-                        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.15), transparent 25%);
-            background-size: cover;
-        }
-        
-        .dots-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: radial-gradient(#ffffff 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.1;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* --- Шапка --- */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--text-main);
-            text-decoration: none;
-        }
-
-        .logo svg { margin-right: 10px; fill: var(--primary); }
-        nav a { color: var(--text-secondary); text-decoration: none; margin-left: 20px; transition: 0.3s; }
-        nav a:hover { color: var(--primary); }
-
-        /* --- Главный экран --- */
-        .hero { text-align: center; padding: 80px 0 40px; }
-        h1 {
-            font-size: 3.5rem; margin-bottom: 10px;
-            background: linear-gradient(90deg, #fff, #94a3b8);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .subtitle { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 40px; }
-
-        /* --- Купон --- */
-        .coupon-banner {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.2));
-            border: 2px dashed var(--hot);
-            border-radius: 15px; padding: 30px; text-align: center;
-            max-width: 800px; margin: 0 auto 60px;
-            cursor: pointer; transition: transform 0.2s;
-        }
-        .coupon-banner:active { transform: scale(0.98); }
-        .coupon-banner h2 { margin: 0; color: var(--hot); font-size: 2rem; }
-        .coupon-code {
-            background: #fff; color: var(--bg-color); padding: 10px 20px;
-            border-radius: 8px; font-weight: bold; font-size: 1.5rem;
-            display: inline-block; margin-top: 15px;
-        }
-
-        /* --- Тарифы --- */
-        .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px; }
-        .card {
-            background: var(--card-bg); border-radius: 20px; padding: 40px; text-align: center;
-            border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative;
-        }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-color: var(--primary); }
-        .card.popular { border: 1px solid var(--primary); background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, var(--card-bg) 100%); }
-        .card.popular::before {
-            content: "ХИТ ПРОДАЖ"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-            background: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
-        }
-        .plan-name { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; }
-        .price { font-size: 2.5rem; font-weight: bold; margin-bottom: 20px; }
-        .price span { font-size: 1rem; color: var(--text-secondary); }
-        .features { list-style: none; padding: 0; margin-bottom: 30px; text-align: left; }
-        .features li { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; color: var(--text-secondary); }
-        .features li svg { width: 20px; height: 20px; margin-right: 10px; fill: var(--accent); }
-        
-        .btn {
-            display: block; width: 100%; padding: 15px; border-radius: 10px;
-            background: rgba(255,255,255,0.1); color: #fff; text-decoration: none;
-            font-weight: bold; transition: 0.3s; cursor: pointer; border: none; font-size: 1rem;
-        }
-        .btn:hover { background: var(--primary); }
-        .btn-primary { background: var(--primary); }
-        .btn-primary:hover { background: #2563eb; }
-
-        /* --- Footer --- */
-        footer { background: #0b1120; padding: 50px 0; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; }
-        .footer-col { margin-bottom: 20px; }
-        .footer-col h4 { margin-bottom: 15px; }
-        .footer-col p, .footer-col a { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; text-decoration: none; display: block; }
-
-        /* --- МОДАЛЬНЫЕ ОКНА (Новые стили) --- */
-        .modal-overlay {
-            display: none; /* Скрыто по умолчанию */
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal {
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 400px;
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            transform: scale(0.8);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        .modal-overlay.active .modal {
-            transform: scale(1);
-        }
-
-        .modal h3 { margin-top: 0; text-align: center; }
-        
-        .close-modal {
-            position: absolute; top: 15px; right: 15px;
-            background: none; border: none; color: var(--text-secondary);
-            font-size: 24px; cursor: pointer;
-        }
-
-        /* Элементы внутри модалки оплаты */
-        .form-group { margin-bottom: 15px; }
-        .form-label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-secondary); }
-        .form-input {
-            width: 100%; padding: 12px; border-radius: 8px;
-            background: #0f172a; border: 1px solid rgba(255,255,255,0.1);
-            color: #fff; font-size: 1rem; box-sizing: border-box;
-        }
-        .form-input:focus { outline: none; border-color: var(--primary); }
-        
-        .row { display: flex; gap: 10px; }
-
-        /* Успешное сообщение купона */
-        .success-icon {
-            width: 80px; height: 80px; background: var(--accent);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 20px;
-        }
-        .success-icon svg { width: 40px; height: 40px; fill: white; }
-
-        /* Лоадер для оплаты */
-        .loader {
-            border: 4px solid #f3f3f3; border-top: 4px solid var(--primary);
-            border-radius: 50%; width: 40px; height: 40px;
-            animation: spin 1s linear infinite; margin: 20px auto;
-            display: none;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .payment-success { display: none; text-align: center; }
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TverACloud | ЛУЧШИЕ VDS в Твери</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --md-sys-color-primary: #3b82f6;
+      --md-sys-color-secondary: #10b981;
+      --md-sys-color-error: #ef4444;
+      --md-sys-color-surface: #0f172a;
+      --md-sys-color-surface-variant: #1e293b;
+      --md-sys-color-on-surface: #f8fafc;
+      --md-sys-color-on-surface-variant: #94a3b8;
+      --md-sys-color-outline: rgba(255,255,255,0.12);
+      --md-elevation-level1: 0 1px 3px 0 rgba(0,0,0,0.3), 0 1px 2px 0 rgba(0,0,0,0.15);
+      --md-elevation-level2: 0 3px 6px 0 rgba(0,0,0,0.3), 0 3px 6px 0 rgba(0,0,0,0.15);
+      --md-elevation-level3: 0 8px 24px 0 rgba(0,0,0,0.3);
+      --md-shape-corner-medium: 12px;
+      --md-shape-corner-large: 16px;
+      --md-shape-corner-extra-large: 28px;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+                  radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.15), transparent 25%);
+      background-size: cover;
+    }
+    .dots-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-image: radial-gradient(#ffffff 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.1;
+    }
+    .app-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background-color: var(--md-sys-color-surface);
+      box-shadow: var(--md-elevation-level1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface);
+      text-decoration: none;
+    }
+    .logo .material-icons-outlined {
+      font-size: 28px;
+      margin-right: 8px;
+      color: var(--md-sys-color-primary);
+    }
+    nav {
+      display: flex;
+    }
+    nav a {
+      color: var(--md-sys-color-on-surface-variant);
+      text-decoration: none;
+      margin-left: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover, nav a:focus {
+      color: var(--md-sys-color-primary);
+    }
+    .hero {
+      text-align: center;
+      padding: 48px 24px 24px;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, var(--md-sys-color-on-surface), var(--md-sys-color-on-surface-variant));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: var(--md-sys-color-on-surface-variant);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    .coupon-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.2));
+      border: 2px dashed var(--md-sys-color-error);
+      border-radius: var(--md-shape-corner-large);
+      padding: 24px;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 48px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: var(--md-elevation-level1);
+    }
+    .coupon-banner:active {
+      transform: scale(0.98);
+    }
+    .coupon-banner h2 {
+      margin: 0;
+      color: var(--md-sys-color-error);
+      font-size: 24px;
+      font-weight: 500;
+    }
+    .coupon-code {
+      background: #fff;
+      color: var(--md-sys-color-surface);
+      padding: 8px 16px;
+      border-radius: var(--md-shape-corner-medium);
+      font-weight: 500;
+      font-size: 18px;
+      display: inline-block;
+      margin-top: 12px;
+    }
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 0 24px;
+      margin-bottom: 48px;
+    }
+    .card {
+      background: var(--md-sys-color-surface-variant);
+      border-radius: var(--md-shape-corner-large);
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--md-elevation-level1);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover, .card:focus-within {
+      transform: translateY(-8px);
+      box-shadow: var(--md-elevation-level2);
+    }
+    .card.popular {
+      border: 2px solid var(--md-sys-color-primary);
+      background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, var(--md-sys-color-surface-variant) 100%);
+    }
+    .card.popular::before {
+      content: "ХИТ ПРОДАЖ";
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-surface);
+      padding: 4px 12px;
+      border-radius: var(--md-shape-corner-medium);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .plan-name {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .price {
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    .price span {
+      font-size: 14px;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .features {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .features li {
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: 14px;
+    }
+    .features li .material-icons-outlined {
+      font-size: 20px;
+      margin-right: 8px;
+      color: var(--md-sys-color-secondary);
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border-radius: var(--md-shape-corner-medium);
+      background: var(--md-sys-color-outline);
+      color: var(--md-sys-color-on-surface);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s;
+      cursor: pointer;
+      border: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn:hover, .btn:focus {
+      background: var(--md-sys-color-primary);
+      color: #fff;
+    }
+    .btn-primary {
+      background: var(--md-sys-color-primary);
+      color: #fff;
+    }
+    .btn-primary:hover, .btn-primary:focus {
+      background: #2563eb;
+    }
+    footer {
+      background: rgba(0,0,0,0.3);
+      padding: 32px 24px;
+      margin-top: auto;
+      border-top: 1px solid var(--md-sys-color-outline);
+    }
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .footer-col {
+      flex: 1;
+      min-width: 200px;
+    }
+    .footer-col h4 {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+    .footer-col p, .footer-col a {
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: 14px;
+      line-height: 1.5;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .footer-col a:hover {
+      color: var(--md-sys-color-primary);
+    }
+    .copyright {
+      text-align: center;
+      margin-top: 24px;
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: 12px;
+    }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+    .modal {
+      background: var(--md-sys-color-surface-variant);
+      padding: 24px;
+      border-radius: var(--md-shape-corner-extra-large);
+      width: 90%;
+      max-width: 400px;
+      box-shadow: var(--md-elevation-level2);
+      position: relative;
+      transform: scale(0.95);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+    .close-modal {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .close-modal .material-icons-outlined {
+      font-size: 24px;
+    }
+    .modal h3 {
+      font-size: 20px;
+      font-weight: 500;
+      margin: 0 0 16px;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: var(--md-shape-corner-medium);
+      background: var(--md-sys-color-surface);
+      border: 1px solid var(--md-sys-color-outline);
+      color: var(--md-sys-color-on-surface);
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--md-sys-color-primary);
+    }
+    .row {
+      display: flex;
+      gap: 16px;
+    }
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--md-sys-color-secondary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .success-icon .material-icons-outlined {
+      font-size: 32px;
+      color: #fff;
+    }
+    .loader {
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top: 4px solid var(--md-sys-color-primary);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 24px auto;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .payment-success {
+      display: none;
+      text-align: center;
+    }
+    /* Ripple effect for buttons (Material touch feedback) */
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+    }
+    .btn:active::before {
+      width: 300px;
+      height: 300px;
+      opacity: 1;
+    }
+    /* Media queries for mobile-first (Android-like) */
+    @media (max-width: 600px) {
+      .app-bar {
+        padding: 16px;
+      }
+      .hero {
+        padding: 32px 16px 16px;
+      }
+      .pricing {
+        padding: 0 16px;
+        gap: 16px;
+      }
+      .coupon-banner {
+        margin: 0 16px 32px;
+      }
+      footer {
+        padding: 24px 16px;
+      }
+    }
+    /* Styles for the game modal */
+    #gameModal .modal {
+      max-width: 500px;
+      width: 95%;
+      padding: 0;
+      overflow: hidden;
+    }
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 400px;
+      padding: 16px;
+    }
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .game-title {
+      font-size: 20px;
+      font-weight: 500;
+      margin: 0;
+    }
+    .game-score {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .clicker-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--md-sys-color-surface);
+      border-radius: var(--md-shape-corner-large);
+      margin-bottom: 16px;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+    .clicker-button {
+      font-size: 64px;
+      transition: transform 0.1s;
+    }
+    .clicker-button:active {
+      transform: scale(1.1);
+    }
+    .floating-text {
+      position: absolute;
+      font-size: 24px;
+      color: var(--md-sys-color-secondary);
+      pointer-events: none;
+      animation: float-up 1s ease-out forwards;
+    }
+    @keyframes float-up {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-50px); }
+    }
+    .upgrades {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+    }
+    .upgrade-btn {
+      padding: 8px;
+      background: var(--md-sys-color-outline);
+      border-radius: var(--md-shape-corner-medium);
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .upgrade-btn:hover {
+      background: var(--md-sys-color-primary);
+      color: #fff;
+    }
+    .upgrade-btn.disabled {
+      background: rgba(255,255,255,0.05);
+      cursor: not-allowed;
+    }
+    .upgrade-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .upgrade-cost {
+      font-size: 12px;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .upgrade-level {
+      font-size: 12px;
+      color: var(--md-sys-color-secondary);
+    }
+    .progress-bar {
+      height: 4px;
+      background: var(--md-sys-color-outline);
+      margin-top: 8px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--md-sys-color-primary);
+      transition: width 0.3s;
+    }
+    .discount-unlocked {
+      text-align: center;
+      margin-top: 16px;
+      color: var(--md-sys-color-secondary);
+      font-weight: 500;
+    }
+     #info{
+      font-size: 1.2rem;
+      width: 95%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(240, 255, 255, 0.1);
+      margin: 42px auto 0 auto;
+      padding: 6px 0px 12px 0px;
+    }
+    #info>a{
+      text-decoration: none;
+      width: 90%;
+    }
+    #info>a>button{
+      font-size: 1.5rem;
+      padding: 4px;
+    }
+  </style>
 </head>
 <body>
+  <div class="background-animation"></div>
+  <div class="dots-overlay"></div>
 
-    <div class="background-animation"></div>
-    <div class="dots-overlay"></div>
+  <header class="app-bar">
+    <a href="#" class="logo">
+      <span class="material-icons-outlined">cloud</span>
+      TverACloud
+    </a>
+    <nav>
+      <a href="#pricing">Тарифы</a>
+      <a href="#footer">О нас</a>
+      <a href="#footer">Поддержка</a>
+    </nav>
+  </header>
 
-    <div class="container">
-        <header>
-            <a href="#" class="logo">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
-                TverACloud
-            </a>
-            <nav>
-                <a href="#">Тарифы</a>
-                <a href="#">О нас</a>
-                <a href="#">Поддержка</a>
-            </nav>
-        </header>
+  <section class="hero">
+    <h1>Мощные VDS в Твери</h1>
+    <p class="subtitle">Локальный хостинг с минимальным пингом для вашего бизнеса.</p>
+  </section>
 
-        <section class="hero">
-            <h1>Мощные VDS в Твери</h1>
-            <p class="subtitle">Локальный хостинг с минимальным пингом для вашего бизнеса.</p>
-        </section>
+  <div class="coupon-banner" onclick="openCouponModal()">
+    <h2>Скидка -60% для новых клиентов!</h2>
+    <p class="coupon-desc" style="font-size: 14px; color: var(--md-sys-color-on-surface-variant); margin: 8px 0;">Только первые 3 месяца аренды любого сервера.</p>
+    <div class="coupon-code">TVER60START</div>
+    <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 8px;">*Нажмите, чтобы скопировать</p>
+  </div>
 
-        <div class="coupon-banner" onclick="openCouponModal()">
-            <h2>Скидка -60% для новых клиентов!</h2>
-            <p class="coupon-desc">Только первые 3 месяца аренды любого сервера.</p>
-            <div class="coupon-code">TVER60START</div>
-            <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 10px;">*Нажмите, чтобы применить</p>
-        </div>
-
-        <div class="pricing">
-            <div class="card">
-                <div class="plan-name">START</div>
-                <div class="price">1 100 ₽<span>/мес</span></div>
-                <ul class="features">
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 2 Ядра CPU</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 4 GB RAM</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 40 GB SSD</li>
-                </ul>
-                <button class="btn" onclick="openOrderModal('START')">Заказать</button>
-            </div>
-
-            <div class="card popular">
-                <div class="plan-name">MEDIUM</div>
-                <div class="price">2 560 ₽<span>/мес</span></div>
-                <ul class="features">
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 3 Ядра CPU</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 8 GB RAM</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 60 GB SSD</li>
-                </ul>
-                <button class="btn btn-primary" onclick="openOrderModal('MEDIUM')">Заказать</button>
-            </div>
-
-            <div class="card">
-                <div class="plan-name">HARD</div>
-                <div class="price">4 200 ₽<span>/мес</span></div>
-                <ul class="features">
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 4 Ядра CPU</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 12 GB RAM</li>
-                    <li><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 80 GB SSD</li>
-                </ul>
-                <button class="btn" onclick="openOrderModal('HARD')">Заказать</button>
-            </div>
-        </div>
+  <div id="pricing" class="pricing">
+    <div class="card">
+      <div class="plan-name">START</div>
+      <div class="price">1 100 ₽<span>/мес</span></div>
+      <ul class="features">
+        <li><span class="material-icons-outlined">check</span> 2 Ядра CPU</li>
+        <li><span class="material-icons-outlined">check</span> 4 GB RAM</li>
+        <li><span class="material-icons-outlined">check</span> 40 GB SSD</li>
+      </ul>
+      <button class="btn" onclick="openOrderModal('START')">Заказать</button>
     </div>
 
-    <div id="modalCoupon" class="modal-overlay" onclick="closeModals(event)">
-        <div class="modal">
-            <button class="close-modal" onclick="closeModals(null)">&times;</button>
-            <div class="success-icon">
-                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            </div>
-            <h3>Купон применен!</h3>
-            <p style="text-align: center; color: #94a3b8;">
-                Промокод <b>TVER60START</b> успешно активирован.<br>
-                Скидка 60% будет учтена при первом платеже.
-            </p>
-            <button class="btn btn-primary" onclick="closeModals(null)">Отлично</button>
-        </div>
+    <div class="card popular">
+      <div class="plan-name">MEDIUM</div>
+      <div class="price">2 560 ₽<span>/мес</span></div>
+      <ul class="features">
+        <li><span class="material-icons-outlined">check</span> 3 Ядра CPU</li>
+        <li><span class="material-icons-outlined">check</span> 8 GB RAM</li>
+        <li><span class="material-icons-outlined">check</span> 60 GB SSD</li>
+      </ul>
+      <button class="btn btn-primary" onclick="openOrderModal('MEDIUM')">Заказать</button>
     </div>
 
-    <div id="modalOrder" class="modal-overlay" onclick="closeModals(event)">
-        <div class="modal">
-            <button class="close-modal" onclick="closeModals(null)">&times;</button>
-            
-            <div id="paymentForm">
-                <h3 id="orderTitle">Оформление: Тариф START</h3>
-                
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" placeholder="vash@mail.ru">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Номер карты</label>
-                    <input type="text" class="form-input" placeholder="0000 0000 0000 0000">
-                </div>
-
-                <div class="row">
-                    <div class="form-group" style="flex: 1;">
-                        <label class="form-label">Срок</label>
-                        <input type="text" class="form-input" placeholder="MM/YY">
-                    </div>
-                    <div class="form-group" style="flex: 1;">
-                        <label class="form-label">CVC</label>
-                        <input type="text" class="form-input" placeholder="123">
-                    </div>
-                </div>
-
-                <button class="btn btn-primary" onclick="processPayment()">Оплатить</button>
-            </div>
-
-            <div class="loader" id="paymentLoader"></div>
-
-            <div id="paymentSuccess" class="payment-success">
-                <div class="success-icon">
-                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                </div>
-                <h3>Оплата прошла успешно!</h3>
-                <p style="color: #94a3b8;">Сервер будет создан в течение 5 минут. Данные доступа отправлены на Email.</p>
-                <button class="btn" onclick="closeModals(null)">Закрыть</button>
-            </div>
-
-        </div>
+    <div class="card">
+      <div class="plan-name">HARD</div>
+      <div class="price">4 200 ₽<span>/мес</span></div>
+      <ul class="features">
+        <li><span class="material-icons-outlined">check</span> 4 Ядра CPU</li>
+        <li><span class="material-icons-outlined">check</span> 12 GB RAM</li>
+        <li><span class="material-icons-outlined">check</span> 80 GB SSD</li>
+      </ul>
+      <button class="btn" onclick="openOrderModal('HARD')">Заказать</button>
     </div>
+  </div>
 
-<footer>
-        <div class="container footer-content">
-            <div class="footer-col" style="max-width: 300px;">
-                <div class="logo" style="margin-bottom: 10px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
-                    TverACloud
-                </div>
-                <p>Ваш надежный партнер в мире облачных технологий. Размещаем оборудование в лучших ЦОД Твери и Москвы.</p>
-            </div>
-            
-            <div class="footer-col">
-                <h4>Контакты</h4>
-                <p>г. Тверь, пр-т Чайковского, д. 28/2, оф. 404</p>
-                <p>Телефон: +7 (4822) 99-00-11</p>
-                <p>Email: support@tveracloud.ru</p>
-            </div>
+  <div id="modalCoupon" class="modal-overlay" onclick="closeModals(event)">
+    <div class="modal">
+      <button class="close-modal" onclick="closeModals(null)"><span class="material-icons-outlined">close</span></button>
+      <div class="success-icon">
+        <span class="material-icons-outlined">check</span>
+      </div>
+      <h3>Купон применен!</h3>
+      <p style="text-align: center; color: var(--md-sys-color-on-surface-variant); font-size: 14px;">
+        Промокод <b>TVER60START</b> успешно скопирован.<br>
+        Скидка 60% будет учтена при первом платеже.
+      </p>
+      <button class="btn btn-primary" onclick="closeModals(null)">Отлично</button>
+    </div>
+  </div>
 
-            <div class="footer-col">
-                <h4>Документы</h4>
-                <a href="#">Политика конфиденциальности</a>
-                <a href="#">Договор оферты</a>
-                <a href="#">Реквизиты</a>
-            </div>
+  <div id="modalOrder" class="modal-overlay" onclick="closeModals(event)">
+    <div class="modal">
+      <button class="close-modal" onclick="closeModals(null)"><span class="material-icons-outlined">close</span></button>
+      <div id="paymentForm">
+        <h3 id="orderTitle">Оформление: Тариф START</h3>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" placeholder="vash@mail.ru">
         </div>
-        <div class="container" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; color: #64748b;">
-            &copy; 2024 ИП "ТверьХост". Все права защищены.
+        <div class="form-group">
+          <label class="form-label">Номер карты</label>
+          <input type="text" class="form-input" placeholder="0000 0000 0000 0000">
         </div>
-    </footer>
+        <div class="row">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Срок</label>
+            <input type="text" class="form-input" placeholder="MM/YY">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">CVC</label>
+            <input type="text" class="form-input" placeholder="123">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="processPayment()">Оплатить</button>
+        <button class="btn btn-primary" style="max-width: 300px; margin: 10px auto;" onclick="openGameModal()">ХОЧУ СКИДКУ</button>
+      </div>
+      
+      <div class="loader" id="paymentLoader"></div>
+      <div id="paymentSuccess" class="payment-success">
+        <div class="success-icon">
+          <span class="material-icons-outlined">check</span>
+        </div>
+        <h3>Оплата прошла успешно!</h3>
+        <p style="color: var(--md-sys-color-on-surface-variant); font-size: 14px;">Сервер будет создан в течение 5 минут. Данные доступа отправлены на Email.</p>
+        <button class="btn" onclick="closeModals(null)">Закрыть</button>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        // Открытие модалки купона
-        function openCouponModal() {
-            // Копируем текст в буфер
-            navigator.clipboard.writeText("TVER60START");
-            
-            const modal = document.getElementById('modalCoupon');
-            modal.classList.add('active');
-        }
+  <!-- Game Modal -->
+  <div id="gameModal" class="modal-overlay" onclick="closeModals(event)">
+    <div class="modal">
+      <button class="close-modal" onclick="closeModals(null)"><span class="material-icons-outlined">close</span></button>
+      <div class="game-container">
+        <div class="game-header">
+          <h3 class="game-title">Кликер за скидку</h3>
+          <div class="game-score">Очки: <span id="score">0</span></div>
+        </div>
+        <div class="clicker-area" id="clickerArea" onclick="clickCloud()">
+          <span class="material-icons-outlined clicker-button">cloud</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        </div>
+        <div class="upgrades" id="upgrades"></div>
+        <div id="discountUnlocked" class="discount-unlocked" style="display: none;">Скидка разблокирована! Код: EXTRA10</div>
+      </div>
+    </div>
+  </div>
 
-        // Открытие модалки заказа
-        function openOrderModal(planName) {
-            const modal = document.getElementById('modalOrder');
-            const title = document.getElementById('orderTitle');
-            
-            // Сбрасываем состояние формы (если открываем повторно)
-            document.getElementById('paymentForm').style.display = 'block';
-            document.getElementById('paymentLoader').style.display = 'none';
-            document.getElementById('paymentSuccess').style.display = 'none';
+  <footer id="footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <div class="logo" style="margin-bottom: 8px;">
+          <span class="material-icons-outlined">cloud</span>
+          TverACloud
+        </div>
+        <p>Ваш надежный партнер в мире облачных технологий. Размещаем оборудование в лучших ЦОД Твери и Москвы.</p>
+      </div>
+          
+      <div class="footer-col">
+        <h4>Контакты</h4>
+        <p>г. Тверь, пр-т Чайковского, д. 28/2, оф. 404</p>
+        <p>Телефон: +7 (4822) 99-00-11</p>
+        <p>Email: support@tveracloud.ru</p>
+      </div>
 
-            title.innerText = "Оформление: Тариф " + planName;
-            modal.classList.add('active');
-        }
+      <div class="footer-col">
+        <h4>Документы</h4>
+        <a href="#">Политика конфиденциальности</a>
+        <a href="#">Договор оферты</a>
+        <a href="#">Реквизиты</a>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; 2025 ИП "ТверьХост". Все права защищены.
+    </div>
+    <div id="info">
+      Больше моих проектов
+      <a href="https://github.com/flirsys">
+        <button class="btn btn-primary">ТУТ</button>
+      </a>
+    </div>
+  </footer>
 
-        // Имитация процесса оплаты
-        function processPayment() {
-            const form = document.getElementById('paymentForm');
-            const loader = document.getElementById('paymentLoader');
-            const success = document.getElementById('paymentSuccess');
+  <script>
+    function openCouponModal() {
+      navigator.clipboard.writeText("TVER60START").then(() => {
+        const modal = document.getElementById('modalCoupon');
+        modal.classList.add('active');
+      });
+    }
 
-            // Скрываем форму, показываем крутилку
-            form.style.display = 'none';
-            loader.style.display = 'block';
+    function openOrderModal(planName) {
+      const modal = document.getElementById('modalOrder');
+      const title = document.getElementById('orderTitle');
+      document.getElementById('paymentForm').style.display = 'block';
+      document.getElementById('paymentLoader').style.display = 'none';
+      document.getElementById('paymentSuccess').style.display = 'none';
+      title.innerText = `Оформление: Тариф ${planName}`;
+      modal.classList.add('active');
+    }
 
-            // Ждем 2 секунды (типа запрос в банк)
-            setTimeout(() => {
-                loader.style.display = 'none';
-                success.style.display = 'block';
-            }, 2000);
-        }
+    function processPayment() {
+      const form = document.getElementById('paymentForm');
+      const loader = document.getElementById('paymentLoader');
+      const success = document.getElementById('paymentSuccess');
+      form.style.display = 'none';
+      loader.style.display = 'block';
+      setTimeout(() => {
+        loader.style.display = 'none';
+        success.style.display = 'block';
+      }, 1500);
+    }
 
-        // Закрытие всех модалок
-        function closeModals(event) {
-            // Если клик по крестику или кнопке (event = null) ИЛИ клик по темному фону (event.target == overlay)
-            if (!event || event.target.classList.contains('modal-overlay')) {
-                document.getElementById('modalCoupon').classList.remove('active');
-                document.getElementById('modalOrder').classList.remove('active');
-            }
-        }
-    </script>
+    function closeModals(event) {
+      if (!event || event.target.classList.contains('modal-overlay')) {
+        document.getElementById('modalCoupon').classList.remove('active');
+        document.getElementById('modalOrder').classList.remove('active');
+        document.getElementById('gameModal').classList.remove('active');
+        saveGame(); // Save progress when closing game modal
+      }
+    }
+
+    // Добавить плавный скролл для nav (single-page)
+    document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Clicker Game Logic
+    let score = 0;
+    let clickValue = 1;
+    let autoClickers = 0;
+    let autoInterval;
+    let level = 1;
+    let xp = 0;
+    let xpToNextLevel = 100;
+    let unlockedDiscount = false;
+
+    const upgrades = [
+      { id: 1, name: 'Улучшить клик', cost: 50, effect: () => { clickValue += 1; }, level: 0 },
+      { id: 2, name: 'Авто-кликер', cost: 100, effect: () => { autoClickers += 1; updateAutoClickers(); }, level: 0 },
+      { id: 3, name: 'Бонус XP', cost: 200, effect: () => { xp += 50; updateProgress(); }, level: 0 }
+    ];
+
+    function loadGame() {
+      const savedData = JSON.parse(localStorage.getItem('cloudClickerSave'));
+      if (savedData) {
+        score = savedData.score || 0;
+        clickValue = savedData.clickValue || 1;
+        autoClickers = savedData.autoClickers || 0;
+        level = savedData.level || 1;
+        xp = savedData.xp || 0;
+        xpToNextLevel = savedData.xpToNextLevel || 100;
+        unlockedDiscount = savedData.unlockedDiscount || false;
+        upgrades.forEach((upg, index) => {
+          upg.level = savedData.upgrades[index]?.level || 0;
+          upg.cost = savedData.upgrades[index]?.cost || upg.cost;
+        });
+      }
+      updateUI();
+      updateAutoClickers();
+    }
+
+    function saveGame() {
+      const saveData = {
+        score,
+        clickValue,
+        autoClickers,
+        level,
+        xp,
+        xpToNextLevel,
+        unlockedDiscount,
+        upgrades: upgrades.map(upg => ({ level: upg.level, cost: upg.cost }))
+      };
+      localStorage.setItem('cloudClickerSave', JSON.stringify(saveData));
+    }
+
+    function updateUI() {
+      document.getElementById('score').textContent = score;
+      const upgradesContainer = document.getElementById('upgrades');
+      upgradesContainer.innerHTML = '';
+      upgrades.forEach(upg => {
+        const btn = document.createElement('div');
+        btn.classList.add('upgrade-btn');
+        if (score < upg.cost) btn.classList.add('disabled');
+        btn.innerHTML = `
+          <div class="upgrade-name">${upg.name}</div>
+          <div class="upgrade-cost">Стоимость: ${upg.cost}</div>
+          <div class="upgrade-level">Уровень: ${upg.level}</div>
+        `;
+        btn.onclick = () => buyUpgrade(upg);
+        upgradesContainer.appendChild(btn);
+      });
+      updateProgress();
+      if (unlockedDiscount) {
+        document.getElementById('discountUnlocked').style.display = 'block';
+      }
+    }
+
+    function updateProgress() {
+      const progress = (xp / xpToNextLevel) * 100;
+      document.getElementById('progressFill').style.width = `${progress}%`;
+      if (xp >= xpToNextLevel) {
+        levelUp();
+      }
+    }
+
+    function clickCloud() {
+      score += clickValue;
+      xp += 1;
+      createFloatingText(`+${clickValue}`);
+      updateUI();
+    }
+
+    function createFloatingText(text) {
+      const floating = document.createElement('div');
+      floating.classList.add('floating-text');
+      floating.textContent = text;
+      floating.style.left = `${Math.random() * 80 + 10}%`;
+      document.getElementById('clickerArea').appendChild(floating);
+      setTimeout(() => floating.remove(), 1000);
+    }
+
+    function buyUpgrade(upgrade) {
+      if (score >= upgrade.cost) {
+        score -= upgrade.cost;
+        upgrade.effect();
+        upgrade.level += 1;
+        upgrade.cost = Math.floor(upgrade.cost * 1.5);
+        updateUI();
+      }
+    }
+
+    function updateAutoClickers() {
+      if (autoInterval) clearInterval(autoInterval);
+      if (autoClickers > 0) {
+        autoInterval = setInterval(() => {
+          score += autoClickers;
+          xp += autoClickers * 0.5;
+          updateUI();
+        }, 1000);
+      }
+    }
+
+    function levelUp() {
+      level += 1;
+      xp -= xpToNextLevel;
+      xpToNextLevel = Math.floor(xpToNextLevel * 1.2);
+      clickValue += level;
+      if (level >= 5 && !unlockedDiscount) {
+        unlockedDiscount = true;
+        navigator.clipboard.writeText('EXTRA10');
+        alert('Поздравляем! Вы разблокировали дополнительную скидку 10%! Код: EXTRA10 (скопирован в буфер)');
+      }
+      updateUI();
+    }
+
+    function openGameModal() {
+      loadGame();
+      const modal = document.getElementById('gameModal');
+      modal.classList.add('active');
+    }
+
+    // Auto-save every 30 seconds
+    setInterval(saveGame, 30000);
+  </script>
 </body>
 </html>
